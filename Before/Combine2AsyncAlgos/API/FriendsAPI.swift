@@ -14,7 +14,7 @@ final class FriendsAPI {
         return [
             Notification(id: "4", message: "Tom"),
             Notification(id: "5", message: "Mark"),
-            Notification(id: "6", message: "Jane")
+            Notification(id: "6", message: "Jane"),
             Notification(id: "6", message: "Derek")
         ]
     }

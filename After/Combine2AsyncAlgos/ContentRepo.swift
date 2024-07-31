@@ -5,11 +5,12 @@
 //  Created by Jacob Bartlett on 21/07/2024.
 //
 
+import AsyncAlgorithms
 import Combine
 import Foundation
 
 protocol ContentRepo {
-    var userSubject: CurrentValueSubject<User?, Error> { get }
+    var userChannel: AsyncThrowingChannel<User?, Error> { get }
     var chatNotificationsSubject: CurrentValueSubject<[Notification], Never> { get }
     var friendNotificationsSubject: CurrentValueSubject<[Notification], Never> { get }
     var downloadSubject: PassthroughSubject<Double, Never> { get }
@@ -20,7 +21,8 @@ protocol ContentRepo {
 }
 
 final class ContentRepoImpl: ContentRepo {
-    var userSubject = CurrentValueSubject<User?, Error>(nil)
+    
+    var userChannel = AsyncThrowingChannel<User?, Error>()
     var chatNotificationsSubject = CurrentValueSubject<[Notification], Never>([])
     var friendNotificationsSubject = CurrentValueSubject<[Notification], Never>([])
     var downloadSubject = PassthroughSubject<Double, Never>()
@@ -36,9 +38,9 @@ final class ContentRepoImpl: ContentRepo {
         Task {
             do {
                 let user = try await userAPI.getUser()
-                userSubject.send(user)
+                await userChannel.send(user)
             } catch {
-                userSubject.send(completion: .failure(error))
+                userChannel.fail(error)
             }
         }
     }

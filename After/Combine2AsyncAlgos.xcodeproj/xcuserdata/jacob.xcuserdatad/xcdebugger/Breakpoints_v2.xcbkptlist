@@ -3,4 +3,80 @@
    uuid = "7AE44A9B-0168-4ECA-9F66-B47C32EE86E0"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C101D2C-E6FB-478A-BB72-7685735FD3AD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Combine2AsyncAlgos/ContentViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "handleUserValues()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9C101D2C-E6FB-478A-BB72-7685735FD3AD - b5b4ba244cdbb94e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for Combine2AsyncAlgos.ContentViewModel.handleUserValues() async -&gt; ()"
+                  moduleName = "Combine2AsyncAlgos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/Combine2AsyncAlgos/After/Combine2AsyncAlgos/ContentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51">
+               </Location>
+               <Location
+                  uuid = "9C101D2C-E6FB-478A-BB72-7685735FD3AD - 1692227dbcc93e43"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for Combine2AsyncAlgos.ContentViewModel.handleUserValues() async -&gt; ()"
+                  moduleName = "Combine2AsyncAlgos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/Combine2AsyncAlgos/After/Combine2AsyncAlgos/ContentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51">
+               </Location>
+               <Location
+                  uuid = "9C101D2C-E6FB-478A-BB72-7685735FD3AD - e1f231a87a357d4c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Combine2AsyncAlgos.ContentViewModel.handleUserValues() async -&gt; ()"
+                  moduleName = "Combine2AsyncAlgos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/Combine2AsyncAlgos/After/Combine2AsyncAlgos/ContentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51">
+               </Location>
+               <Location
+                  uuid = "9C101D2C-E6FB-478A-BB72-7685735FD3AD - ba1eec527cb9df33"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for Combine2AsyncAlgos.ContentViewModel.handleUserValues() async -&gt; ()"
+                  moduleName = "Combine2AsyncAlgos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacob/Repos/Writing/Combine2AsyncAlgos/After/Combine2AsyncAlgos/ContentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

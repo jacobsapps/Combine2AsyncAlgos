@@ -5,8 +5,9 @@
 //  Created by Jacob Bartlett on 21/07/2024.
 //
 
-import Foundation
+import AsyncAlgorithms
 import Combine
+import Foundation
 
 @Observable
 final class ContentViewModel {
@@ -24,7 +25,9 @@ final class ContentViewModel {
     }
     
     private func configureSubscriptions() {
-        subscribeToUser()
+        Task {
+            await handleUserValues()
+        }
         subscribeToNotifications()
         subscribeToDownloadTask()
     }
@@ -36,18 +39,16 @@ final class ContentViewModel {
         repo.performDownload()
     }
     
-    private func subscribeToUser() {
-        repo.userSubject
-            .compactMap { $0 }
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    print(error)
-                }
-            }, receiveValue: { [weak self] user in
-                self?.user = user
-            })
-            .store(in: &cancellables)
+    @MainActor
+    private func handleUserValues() async {
+        do {
+            for try await user in repo.userChannel.compacted() {
+                self.user = user
+            }
+                    
+        } catch {
+            print(error)
+        }
     }
     
     private func subscribeToNotifications() {
