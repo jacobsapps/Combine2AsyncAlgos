@@ -17,7 +17,6 @@ final class ContentViewModel {
     var downloadPercentage: Double = 0
     
     private let repo: ContentRepo = ContentRepoImpl()
-    private var cancellables = Set<AnyCancellable>()
     
     init() {
         configureSubscriptions()
@@ -25,18 +24,15 @@ final class ContentViewModel {
     }
     
     private func configureSubscriptions() {
-        Task {
-            await handleUserValues()
-        }
-        subscribeToNotifications()
-        subscribeToDownloadTask()
+        Task { await handleUserValues() }
+        Task { await performDownload() }
+        Task { await streamNotificationCount() }
     }
     
     private func loadData() {
         repo.loadUser()
         repo.streamChatNotifications()
         repo.streamFriendNotifications()
-        repo.performDownload()
     }
     
     @MainActor
@@ -51,20 +47,24 @@ final class ContentViewModel {
         }
     }
     
-    private func subscribeToNotifications() {
-        repo.chatNotificationsSubject
-            .combineLatest(repo.friendNotificationsSubject)
-            .map { $0.0.count + $0.1.count }
-            .receive(on: RunLoop.main)
-            .assign(to: \.notificationCount, on: self)
-            .store(in: &cancellables)
+    @MainActor
+    private func streamNotificationCount() async {
+        for await notificationsCount in combineLatest(
+            repo.chatNotificationsSequence,
+            repo.friendNotificationsSequence
+        ).map({
+            $0.0.count + $0.1.count
+        }) {
+            self.notificationCount = notificationsCount
+        }
     }
-    
-    private func subscribeToDownloadTask() {
-        repo.downloadSubject
-            .throttle(for: .seconds(0.05), scheduler: RunLoop.main, latest: true)
-            .receive(on: RunLoop.main)
-            .assign(to: \.downloadPercentage, on: self)
-            .store(in: &cancellables)
+
+    @MainActor
+    private func performDownload() async {
+        for await percentage in repo
+            .performDownload()
+            ._throttle(for: .seconds(0.05), latest: true) {
+                self.downloadPercentage = percentage
+            }
     }
 }

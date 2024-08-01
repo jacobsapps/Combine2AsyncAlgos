@@ -11,21 +11,28 @@ import Foundation
 
 protocol ContentRepo {
     var userChannel: AsyncThrowingChannel<User?, Error> { get }
-    var chatNotificationsSubject: CurrentValueSubject<[Notification], Never> { get }
-    var friendNotificationsSubject: CurrentValueSubject<[Notification], Never> { get }
-    var downloadSubject: PassthroughSubject<Double, Never> { get }
+    var chatNotificationsSequence: AsyncPublisher<AnyPublisher<[Notification], Never>> { get }
+    var friendNotificationsSequence: AsyncPublisher<AnyPublisher<[Notification], Never>> { get }
     func loadUser()
     func streamChatNotifications()
     func streamFriendNotifications()
-    func performDownload()
+    func performDownload() -> AsyncStream<Double>
 }
 
 final class ContentRepoImpl: ContentRepo {
+ 
+    var chatNotificationsSequence: AsyncPublisher<AnyPublisher<[Notification], Never>> {
+        chatNotificationsSubject.eraseToAnyPublisher().values
+    }
+    
+    var friendNotificationsSequence: AsyncPublisher<AnyPublisher<[Notification], Never>> {
+        friendNotificationsSubject.eraseToAnyPublisher().values
+    }
     
     var userChannel = AsyncThrowingChannel<User?, Error>()
-    var chatNotificationsSubject = CurrentValueSubject<[Notification], Never>([])
-    var friendNotificationsSubject = CurrentValueSubject<[Notification], Never>([])
-    var downloadSubject = PassthroughSubject<Double, Never>()
+   
+    private var chatNotificationsSubject = CurrentValueSubject<[Notification], Never>([])
+    private var friendNotificationsSubject = CurrentValueSubject<[Notification], Never>([])
     
     private let userAPI = UserAPI()
     private let chatAPI = ChatAPI()
@@ -59,10 +66,13 @@ final class ContentRepoImpl: ContentRepo {
         }
     }
 
-    func performDownload() {
-        Task {
-            await downloadAPI.startDownload { [weak self] percentage in
-                self?.downloadSubject.send(percentage)
+    func performDownload() -> AsyncStream<Double> {
+        AsyncStream { continuation in
+            Task {
+                await downloadAPI.startDownload { percentage in
+                    continuation.yield(percentage)
+                }
+                continuation.finish()
             }
         }
     }
